@@ -1,0 +1,107 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: PDFEndpoint
+providerId: pdfendpoint
+created: '2026-06-25'
+modified: '2026-06-25'
+reconciled: false
+tags:
+- PDF
+- HTML to PDF
+- URL to PDF
+- Conversion
+- Plans
+description: >-
+  PDFEndpoint prices by the number of successful PDF conversions per monthly
+  billing cycle. A free tier provides a small monthly allowance; paid plans
+  raise the included conversion count and support additional conversions
+  beyond the monthly limit at a fixed per-conversion overage rate. Only
+  successful, non-sandbox conversions are billed. The specific monthly prices
+  and conversion counts below are drawn from third-party listings and are not
+  reconciled against the live pricing page.
+notes: >-
+  Verify current plan names, monthly prices, included conversion counts, and
+  overage rate on https://pdfendpoint.com/pricing during reconciliation.
+  Sandbox conversions are watermarked and not billed.
+sources:
+- https://pdfendpoint.com/pricing
+- https://pdfendpoint.com/docs
+plans:
+- id: pdfendpoint-free
+  name: Free
+  type: free
+  description: >-
+    Free monthly allowance of successful conversions, rate limited to 30
+    requests per minute.
+  entries:
+  - label: Conversions
+    name: conversions
+    type: usage
+    metric: conversions
+    limit: 100
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0
+    userMultiplied: false
+  elements:
+  - name: Convert HTML
+  - name: Convert URL
+  - name: Sandbox Mode
+- id: pdfendpoint-paid
+  name: Paid
+  type: paid
+  description: >-
+    Tiered paid plans by included monthly conversions, rate limited to 240
+    requests per minute, with overage billed per additional conversion.
+  entries:
+  - label: Starter (500 conversions/mo)
+    name: starter
+    type: flat
+    metric: conversions
+    limit: 500
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $9 per month
+    userMultiplied: false
+  - label: 1,000 conversions/mo
+    name: growth
+    type: flat
+    metric: conversions
+    limit: 1000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $14 per month
+    userMultiplied: false
+  - label: 2,500 conversions/mo
+    name: scale
+    type: flat
+    metric: conversions
+    limit: 2500
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $19 per month
+    userMultiplied: false
+  - label: Additional Conversions (overage)
+    name: overage
+    type: usage
+    metric: conversions
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0.04 per additional conversion
+    userMultiplied: false
+  elements:
+  - name: Convert HTML
+  - name: Convert URL
+  - name: Webhook / S3 / GCP Delivery
+  - name: Encryption
+  - name: Headers and Footers
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

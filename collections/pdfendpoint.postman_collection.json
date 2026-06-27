@@ -1,0 +1,290 @@
+{
+  "item": [
+    {
+      "id": "b1f0a2c4-1a2b-4c3d-9e0f-101112131415",
+      "name": "Convert",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c2e1b3d5-2b3c-4d5e-af10-1213141516a7",
+          "name": "Convert HTML or a URL to PDF.",
+          "request": {
+            "name": "Convert HTML or a URL to PDF.",
+            "description": {
+              "content": "Renders raw HTML (html) or a publicly accessible HTTPS URL (url) into a PDF. Exactly one of html or url is required.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "convert"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://example.com\",\n  \"page_size\": \"A4\",\n  \"orientation\": \"vertical\",\n  \"margin_top\": \"0px\",\n  \"sandbox\": true,\n  \"delivery_mode\": \"json\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d3f2c4e6-3c4d-4e6f-b021-1314151617b8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"https://example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"success\": true,\n  \"billed\": true,\n  \"billed_units\": 1,\n  \"data\": {\n    \"url\": \"https://storage.pdfendpoint.com/example.pdf\",\n    \"filename\": \"example.pdf\",\n    \"file_size\": 12345,\n    \"expires_after\": \"2026-07-25T00:00:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e4f3d5g7-4d5e-4f70-c132-1415161718c9",
+      "name": "Renders",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f5g4e6h8-5e6f-4071-d243-151617181920",
+          "name": "List created PDFs.",
+          "request": {
+            "name": "List created PDFs.",
+            "description": {
+              "content": "Lists previously created PDFs from latest to oldest.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "g6h5f7i9-6f70-4182-e354-161718192021",
+          "name": "Delete a specific PDF.",
+          "request": {
+            "name": "Delete a specific PDF.",
+            "description": {
+              "content": "Deletes a previously created PDF identified by its task identifier.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "remove",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "task_id",
+                  "value": "<string>"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "h7i6g8j0-7081-4293-f465-171819202122",
+      "name": "Account",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "i8j7h9k1-8192-4304-0576-181920212223",
+          "name": "Get current billing-cycle usage.",
+          "request": {
+            "name": "Get current billing-cycle usage.",
+            "description": {
+              "content": "Returns API usage for the current billing cycle.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "usage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "j9k8i0l2-9203-4415-1687-192021222324",
+          "name": "System status check.",
+          "request": {
+            "name": "System status check.",
+            "description": {
+              "content": "Returns the current system status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.pdfendpoint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a0b1c2d3-e4f5-4607-8809-0a1b2c3d4e5f",
+    "name": "PDFEndpoint API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Lightweight HTML and URL to PDF conversion API.\n\nContact Support:\n Name: PDFEndpoint Support\n URL: https://pdfendpoint.com",
+      "type": "text/plain"
+    }
+  }
+}

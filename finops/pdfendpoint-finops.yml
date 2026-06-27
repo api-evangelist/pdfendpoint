@@ -1,0 +1,85 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: PDFEndpoint
+providerId: pdfendpoint
+created: '2026-06-25'
+modified: '2026-06-25'
+reconciled: false
+tags:
+- PDF
+- HTML to PDF
+- Conversion
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of PDFEndpoint spend. PDFEndpoint bills per successful PDF
+  conversion against a monthly plan allowance, with additional conversions
+  beyond the included quota billed at a fixed per-conversion overage rate.
+  Sandbox conversions are watermarked and not billed, and failed conversions
+  are not charged. Cost is therefore driven by the count of successful,
+  non-sandbox conversions.
+notes: >-
+  Per-conversion overage rate and included monthly counts are subject to
+  change; verify against https://pdfendpoint.com/pricing during reconciliation.
+sources:
+- https://pdfendpoint.com/pricing
+- https://pdfendpoint.com/docs
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: PDFEndpoint
+serviceCategory: Document Generation
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+focusColumns:
+  ServiceName: PDFEndpoint
+  ServiceCategory: Document Generation
+  ProviderName: PDFEndpoint
+  PublisherName: PDFEndpoint
+  InvoiceIssuerName: PDFEndpoint
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: conversions
+  description: Successful, non-sandbox PDF conversions counted against the monthly plan allowance.
+  unit: conversions
+  aggregation: sum
+  dimensions:
+  - account
+  - api
+- name: overage_conversions
+  description: Conversions beyond the included monthly quota, billed at a fixed per-conversion rate.
+  unit: conversions
+  aggregation: sum
+  dimensions:
+  - account
+- name: sandbox_conversions
+  description: Watermarked sandbox conversions, which are not billed and do not consume the monthly quota.
+  unit: conversions
+  aggregation: sum
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Track monthly usage via the GET /usage endpoint and the X-Monthly-Limit / X-Monthly-Used response headers.
+- name: Allocation
+  description: Issue separate API keys per workload or team to attribute conversion spend to cost centers.
+- name: Optimization
+  description: Use sandbox mode for development to avoid billed conversions; right-size the monthly plan to expected volume to minimize per-conversion overage.
+- name: Accountability
+  description: Review successful-conversion counts monthly against the plan allowance and overage budget.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

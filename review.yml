@@ -1,0 +1,61 @@
+aid: pdfendpoint
+name: PDFEndpoint
+review:
+  question: Does PDFEndpoint expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-25'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    PDFEndpoint exposes only synchronous HTTPS REST endpoints. Asynchronous
+    result delivery is offered through outbound HTTP webhooks (delivery_mode:
+    webhook with a webhook_endpoint HTTPS URL) and through object-storage
+    delivery (S3, GCP). These are request/response and outbound-callback
+    patterns, not a streaming event protocol, so no AsyncAPI document was
+    authored. No HTTP Server-Sent Events (SSE) surface is documented either.
+findings:
+  summary: |
+    PDFEndpoint does not publish a documented public WebSocket API. The service
+    is a REST API under https://api.pdfendpoint.com/v1 using HTTP Bearer token
+    authentication. The primary operation is POST /convert, which renders HTML
+    or a URL to a PDF and returns a JSON envelope (or base64, inline, JSONP)
+    synchronously. For decoupled delivery, the API can POST the result to a
+    caller-supplied webhook_endpoint or write to an S3 / GCP bucket. No
+    realtime, bidirectional, or streaming WebSocket (ws:// or wss://) endpoint
+    is documented.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.pdfendpoint.com/v1
+      documented: true
+    - protocol: Webhook
+      scheme: https
+      note: Outbound HTTP callback to a caller-supplied webhook_endpoint when delivery_mode is webhook. Not WebSocket.
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in PDFEndpoint's API reference as of the review date.
+  endpointsConfirmedRest:
+    - POST   https://api.pdfendpoint.com/v1/convert
+    - GET    https://api.pdfendpoint.com/v1/list
+    - DELETE https://api.pdfendpoint.com/v1/remove/{task_id}
+    - GET    https://api.pdfendpoint.com/v1/usage
+    - GET    https://api.pdfendpoint.com/v1/health
+sources:
+  - url: https://pdfendpoint.com/docs
+    type: Documentation
+    note: Documents REST base URL https://api.pdfendpoint.com/v1 and Bearer auth; no WebSocket mentioned.
+  - url: https://pdfendpoint.com/docs/delivery-mode
+    type: Documentation
+    note: Lists delivery modes (json, base64, inline, webhook, s3, gcp, jsonp); webhook is an outbound HTTP callback, not WebSocket.
+  - url: https://pdfendpoint.com/docs/document/url
+    type: Documentation
+    note: URL-to-PDF conversion uses POST /convert with the url parameter over HTTPS REST.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists, and asynchronous delivery is handled
+    via outbound HTTP webhooks and object-storage writes rather than a
+    streaming event protocol. No AsyncAPI document was authored.

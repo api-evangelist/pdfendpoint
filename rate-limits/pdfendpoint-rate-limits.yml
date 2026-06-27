@@ -1,0 +1,55 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: PDFEndpoint
+providerId: pdfendpoint
+created: '2026-06-25'
+modified: '2026-06-25'
+reconciled: true
+tags:
+- PDF
+- HTML to PDF
+- Conversion
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  PDFEndpoint enforces a per-minute request rate limit that differs by account
+  type - 30 requests per minute on free accounts and 240 requests per minute on
+  paid accounts - alongside a monthly conversion quota tied to the billing
+  cycle. Responses include X-RateLimit-Limit, X-RateLimit-Remaining,
+  X-RateLimit-Reset, X-Monthly-Limit, and X-Monthly-Used headers. Requests
+  that exceed a limit return HTTP 429.
+notes: >-
+  Per-minute limits and monthly quotas are documented; the exact monthly
+  conversion count depends on the active plan. Verify on
+  https://pdfendpoint.com/docs during reconciliation.
+sources:
+- https://pdfendpoint.com/docs
+- https://pdfendpoint.com/pricing
+responseCodes:
+  throttled: 429
+limits:
+- name: Requests Per Minute (Free)
+  scope: account
+  metric: requests
+  limit: 30
+  notes: Free accounts are limited to 30 requests per minute.
+- name: Requests Per Minute (Paid)
+  scope: account
+  metric: requests
+  limit: 240
+  notes: Paid accounts are limited to 240 requests per minute.
+- name: Monthly Conversion Quota
+  scope: account
+  metric: conversions
+  limit: see plan
+  notes: Monthly successful-conversion allowance set by the active plan; surfaced via X-Monthly-Limit / X-Monthly-Used headers.
+policies:
+- name: Rate Limit Headers
+  description: Responses expose X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-Monthly-Limit, and X-Monthly-Used.
+- name: Backoff Strategy
+  description: On HTTP 429, clients should back off and retry after the window resets per X-RateLimit-Reset.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

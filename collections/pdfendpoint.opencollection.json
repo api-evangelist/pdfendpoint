@@ -1,0 +1,99 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "PDFEndpoint API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Convert",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Convert HTML or a URL to PDF.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.pdfendpoint.com/v1/convert",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"url\": \"https://example.com\",\n  \"page_size\": \"A4\",\n  \"orientation\": \"vertical\",\n  \"sandbox\": true,\n  \"delivery_mode\": \"json\"\n}"
+            }
+          },
+          "docs": "Renders raw HTML (html) or a publicly accessible HTTPS URL (url) into a PDF. Exactly one of html or url is required."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Renders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List created PDFs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.pdfendpoint.com/v1/list"
+          },
+          "docs": "Lists previously created PDFs from latest to oldest."
+        },
+        {
+          "info": {
+            "name": "Delete a specific PDF.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.pdfendpoint.com/v1/remove/{task_id}"
+          },
+          "docs": "Deletes a previously created PDF identified by its task identifier."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get current billing-cycle usage.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.pdfendpoint.com/v1/usage"
+          },
+          "docs": "Returns API usage for the current billing cycle."
+        },
+        {
+          "info": {
+            "name": "System status check.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.pdfendpoint.com/v1/health"
+          },
+          "docs": "Returns the current system status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
