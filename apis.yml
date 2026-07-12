@@ -84,6 +84,10 @@ apis:
     /list, deletes a render via DELETE /remove/{task_id}, and reports usage via GET
     /usage and health via GET /health.
 common:
+- type: DomainSecurity
+  url: security/pdfendpoint-domain-security.yml
+- type: Authentication
+  url: authentication/pdfendpoint-authentication.yml
 - type: Website
   url: https://pdfendpoint.com
 - type: Documentation
