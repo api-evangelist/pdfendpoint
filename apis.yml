@@ -84,6 +84,8 @@ apis:
     /list, deletes a render via DELETE /remove/{task_id}, and reports usage via GET
     /usage and health via GET /health.
 common:
+- type: AgenticAccess
+  url: agentic-access/pdfendpoint-agentic-access.yml
 - type: DomainSecurity
   url: security/pdfendpoint-domain-security.yml
 - type: Authentication
