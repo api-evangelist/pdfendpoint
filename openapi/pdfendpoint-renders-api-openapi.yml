@@ -1,0 +1,93 @@
+openapi: 3.0.1
+info:
+  title: PDFEndpoint Account Renders API
+  description: Lightweight HTML and URL to PDF conversion API. A single POST /convert endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF using a headless browser, with options for page size, margins, orientation, headers and footers, encryption, and multiple delivery modes. Additional endpoints list, remove, and report usage for generated renders.
+  termsOfService: https://pdfendpoint.com
+  contact:
+    name: PDFEndpoint Support
+    url: https://pdfendpoint.com
+  version: '1.0'
+servers:
+- url: https://api.pdfendpoint.com/v1
+security:
+- bearerAuth: []
+tags:
+- name: Renders
+paths:
+  /list:
+    get:
+      operationId: listRenders
+      tags:
+      - Renders
+      summary: List created PDFs.
+      description: Lists previously created PDFs from latest to oldest, with optional filters.
+      responses:
+        '200':
+          description: A list of created renders.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponse'
+        '401':
+          description: Missing or invalid API key.
+  /remove/{task_id}:
+    delete:
+      operationId: removeRender
+      tags:
+      - Renders
+      summary: Delete a specific PDF.
+      description: Deletes a previously created PDF identified by its task identifier.
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: Identifier of the render to delete.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Render deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleResponse'
+        '401':
+          description: Missing or invalid API key.
+        '404':
+          description: Render not found.
+components:
+  schemas:
+    SimpleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    ListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              request_id:
+                type: string
+              filename:
+                type: string
+              file_size:
+                type: integer
+              url:
+                type: string
+                format: uri
+              created_at:
+                type: string
+                format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API key passed as a Bearer token in the Authorization header. Manage keys at https://pdfendpoint.com/app/tokens.

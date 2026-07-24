@@ -1,0 +1,75 @@
+openapi: 3.0.1
+info:
+  title: PDFEndpoint Account API
+  description: Lightweight HTML and URL to PDF conversion API. A single POST /convert endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF using a headless browser, with options for page size, margins, orientation, headers and footers, encryption, and multiple delivery modes. Additional endpoints list, remove, and report usage for generated renders.
+  termsOfService: https://pdfendpoint.com
+  contact:
+    name: PDFEndpoint Support
+    url: https://pdfendpoint.com
+  version: '1.0'
+servers:
+- url: https://api.pdfendpoint.com/v1
+security:
+- bearerAuth: []
+tags:
+- name: Account
+paths:
+  /usage:
+    get:
+      operationId: getUsage
+      tags:
+      - Account
+      summary: Get current billing-cycle usage.
+      description: Returns API usage for the current billing cycle.
+      responses:
+        '200':
+          description: Current usage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageResponse'
+        '401':
+          description: Missing or invalid API key.
+  /health:
+    get:
+      operationId: getHealth
+      tags:
+      - Account
+      summary: System status check.
+      description: Returns the current system status.
+      responses:
+        '200':
+          description: System status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleResponse'
+components:
+  schemas:
+    SimpleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    UsageResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            monthly_limit:
+              type: integer
+            monthly_used:
+              type: integer
+            cycle_ends:
+              type: string
+              format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API key passed as a Bearer token in the Authorization header. Manage keys at https://pdfendpoint.com/app/tokens.

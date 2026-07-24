@@ -1,34 +1,26 @@
 openapi: 3.0.1
 info:
-  title: PDFEndpoint API
-  description: >-
-    Lightweight HTML and URL to PDF conversion API. A single POST /convert
-    endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF
-    using a headless browser, with options for page size, margins, orientation,
-    headers and footers, encryption, and multiple delivery modes. Additional
-    endpoints list, remove, and report usage for generated renders.
+  title: PDFEndpoint Account Convert API
+  description: Lightweight HTML and URL to PDF conversion API. A single POST /convert endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF using a headless browser, with options for page size, margins, orientation, headers and footers, encryption, and multiple delivery modes. Additional endpoints list, remove, and report usage for generated renders.
   termsOfService: https://pdfendpoint.com
   contact:
     name: PDFEndpoint Support
     url: https://pdfendpoint.com
   version: '1.0'
 servers:
-  - url: https://api.pdfendpoint.com/v1
+- url: https://api.pdfendpoint.com/v1
 security:
-  - bearerAuth: []
+- bearerAuth: []
+tags:
+- name: Convert
 paths:
   /convert:
     post:
       operationId: convert
       tags:
-        - Convert
+      - Convert
       summary: Convert HTML or a URL to PDF.
-      description: >-
-        Renders raw HTML (html) or a publicly accessible HTTPS URL (url) into a
-        PDF. Exactly one of html or url is required. Returns a JSON envelope by
-        default; the delivery_mode parameter selects alternate delivery (base64,
-        inline, webhook, s3, gcp, jsonp). Only successful, non-sandbox
-        conversions are billed.
+      description: Renders raw HTML (html) or a publicly accessible HTTPS URL (url) into a PDF. Exactly one of html or url is required. Returns a JSON envelope by default; the delivery_mode parameter selects alternate delivery (base64, inline, webhook, s3, gcp, jsonp). Only successful, non-sandbox conversions are billed.
       requestBody:
         required: true
         content:
@@ -52,94 +44,23 @@ paths:
           description: Missing or invalid API key.
         '429':
           description: Rate limit or monthly conversion limit exceeded.
-  /list:
-    get:
-      operationId: listRenders
-      tags:
-        - Renders
-      summary: List created PDFs.
-      description: >-
-        Lists previously created PDFs from latest to oldest, with optional
-        filters.
-      responses:
-        '200':
-          description: A list of created renders.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListResponse'
-        '401':
-          description: Missing or invalid API key.
-  /remove/{task_id}:
-    delete:
-      operationId: removeRender
-      tags:
-        - Renders
-      summary: Delete a specific PDF.
-      description: Deletes a previously created PDF identified by its task identifier.
-      parameters:
-        - name: task_id
-          in: path
-          required: true
-          description: Identifier of the render to delete.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Render deleted.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SimpleResponse'
-        '401':
-          description: Missing or invalid API key.
-        '404':
-          description: Render not found.
-  /usage:
-    get:
-      operationId: getUsage
-      tags:
-        - Account
-      summary: Get current billing-cycle usage.
-      description: Returns API usage for the current billing cycle.
-      responses:
-        '200':
-          description: Current usage.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsageResponse'
-        '401':
-          description: Missing or invalid API key.
-  /health:
-    get:
-      operationId: getHealth
-      tags:
-        - Account
-      summary: System status check.
-      description: Returns the current system status.
-      responses:
-        '200':
-          description: System status.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SimpleResponse'
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      description: >-
-        API key passed as a Bearer token in the Authorization header. Manage
-        keys at https://pdfendpoint.com/app/tokens.
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
     ConvertRequest:
       type: object
-      description: >-
-        Conversion request. Provide exactly one of html or url. All other
-        properties are optional and control rendering, layout, delivery, and
-        security.
+      description: Conversion request. Provide exactly one of html or url. All other properties are optional and control rendering, layout, delivery, and security.
       properties:
         html:
           type: string
@@ -158,7 +79,9 @@ components:
           description: Page size such as A4, Letter, Legal, or A0-A9 / B0-B9.
         orientation:
           type: string
-          enum: [vertical, horizontal]
+          enum:
+          - vertical
+          - horizontal
           default: vertical
           description: Page orientation.
         viewport:
@@ -248,7 +171,10 @@ components:
           description: Plain text page header. Mutually exclusive with header_html.
         header_align:
           type: string
-          enum: [left, center, right]
+          enum:
+          - left
+          - center
+          - right
         header_margin:
           type: string
           default: 0px
@@ -263,7 +189,10 @@ components:
           description: Plain text page footer. Mutually exclusive with footer_html.
         footer_align:
           type: string
-          enum: [left, center, right]
+          enum:
+          - left
+          - center
+          - right
         footer_margin:
           type: string
           default: 0px
@@ -272,7 +201,14 @@ components:
           default: '1'
         delivery_mode:
           type: string
-          enum: [json, base64, inline, webhook, s3, gcp, jsonp]
+          enum:
+          - json
+          - base64
+          - inline
+          - webhook
+          - s3
+          - gcp
+          - jsonp
           default: json
           description: How the generated PDF is returned or delivered.
         webhook_endpoint:
@@ -361,15 +297,25 @@ components:
           type: string
         encryption_print_rights:
           type: string
-          enum: [full, low, none]
+          enum:
+          - full
+          - low
+          - none
           default: full
         encryption_modify_rights:
           type: string
-          enum: [all, annotate, form, assembly, none]
+          enum:
+          - all
+          - annotate
+          - form
+          - assembly
+          - none
           default: all
         encryption_copy_rights:
           type: string
-          enum: [full, none]
+          enum:
+          - full
+          - none
           default: full
         title:
           type: string
@@ -413,59 +359,8 @@ components:
               type: string
               format: date-time
               description: Timestamp after which the stored PDF expires.
-    ListResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              request_id:
-                type: string
-              filename:
-                type: string
-              file_size:
-                type: integer
-              url:
-                type: string
-                format: uri
-              created_at:
-                type: string
-                format: date-time
-    UsageResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        data:
-          type: object
-          properties:
-            monthly_limit:
-              type: integer
-            monthly_used:
-              type: integer
-            cycle_ends:
-              type: string
-              format: date-time
-    SimpleResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-    ErrorResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
-        errors:
-          type: array
-          items:
-            type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API key passed as a Bearer token in the Authorization header. Manage keys at https://pdfendpoint.com/app/tokens.
