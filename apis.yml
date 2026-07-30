@@ -8,7 +8,20 @@ description: PDFEndpoint is a lightweight HTML and URL to PDF conversion API. A 
   headers and footers, encryption, and multiple delivery modes (JSON URL, base64,
   inline, webhook, S3, GCP). A sandbox mode watermarks output without consuming the
   monthly quota.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/pdfendpoint.png
 tags:
 - PDF
 - HTML to PDF
@@ -19,70 +32,66 @@ created: '2026-06-25'
 modified: '2026-06-25'
 specificationVersion: '0.19'
 apis:
-- aid: pdfendpoint:convert-html-api
-  name: PDFEndpoint Convert HTML API
-  tags:
-  - PDF
-  - HTML to PDF
-  - Conversion
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: pdfendpoint:pdfendpoint-account-api
+  name: PDFEndpoint Account API
+  description: The Account API from PDFEndpoint — 2 operation(s) for account.
   humanURL: https://pdfendpoint.com/docs
   baseURL: https://api.pdfendpoint.com/v1
-  properties:
-  - url: https://pdfendpoint.com/docs
-    type: Documentation
-  - url: openapi/pdfendpoint-openapi.yml
-    type: OpenAPI
-  - url: collections/pdfendpoint.postman_collection.json
-    type: PostmanCollection
-  - url: collections/pdfendpoint.opencollection.json
-    type: OpenCollection
-  description: Converts raw HTML content into a PDF via POST /convert, with options
-    for page size, orientation, margins, viewport, zoom, CSS/JS injection, Liquid
-    templating, headers and footers, image compression, and encryption.
-- aid: pdfendpoint:convert-url-api
-  name: PDFEndpoint Convert URL API
   tags:
-  - PDF
-  - URL to PDF
-  - Conversion
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://pdfendpoint.com/docs/document/url
-  baseURL: https://api.pdfendpoint.com/v1
+  - Account
   properties:
-  - url: https://pdfendpoint.com/docs/document/url
-    type: Documentation
-  - url: openapi/pdfendpoint-openapi.yml
-    type: OpenAPI
-  - url: collections/pdfendpoint.postman_collection.json
-    type: PostmanCollection
-  - url: collections/pdfendpoint.opencollection.json
-    type: OpenCollection
-  description: Converts a publicly accessible HTTPS URL into a PDF via POST /convert
-    using the url parameter, with wait-for-selector, network, cookie, header, basic
-    auth, and geolocation controls for rendering dynamic pages.
-- aid: pdfendpoint:renders-delivery-api
-  name: PDFEndpoint Renders and Delivery API
+  - type: OpenAPI
+    url: openapi/pdfendpoint-account-api-openapi.yml
+  - type: Documentation
+    url: https://pdfendpoint.com/docs
+  - type: PostmanCollection
+    url: collections/pdfendpoint.postman_collection.json
+  - type: OpenCollection
+    url: collections/pdfendpoint.opencollection.json
+  - type: Documentation
+    url: https://pdfendpoint.com/docs/document/url
+  - type: Documentation
+    url: https://pdfendpoint.com/docs/delivery-mode
+- aid: pdfendpoint:pdfendpoint-convert-api
+  name: PDFEndpoint Convert API
+  description: The Convert API from PDFEndpoint — 1 operation(s) for convert.
+  humanURL: https://pdfendpoint.com/docs
+  baseURL: https://api.pdfendpoint.com/v1
   tags:
-  - PDF
-  - Webhooks
-  - Storage
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://pdfendpoint.com/docs/delivery-mode
-  baseURL: https://api.pdfendpoint.com/v1
+  - Convert
   properties:
-  - url: https://pdfendpoint.com/docs/delivery-mode
-    type: Documentation
-  - url: openapi/pdfendpoint-openapi.yml
-    type: OpenAPI
-  - url: collections/pdfendpoint.postman_collection.json
-    type: PostmanCollection
-  - url: collections/pdfendpoint.opencollection.json
-    type: OpenCollection
-  description: Manages generated renders and delivery. Supports delivery modes including
-    json, base64, inline, webhook, s3, gcp, and jsonp; lists created PDFs via GET
-    /list, deletes a render via DELETE /remove/{task_id}, and reports usage via GET
-    /usage and health via GET /health.
+  - type: OpenAPI
+    url: openapi/pdfendpoint-convert-api-openapi.yml
+  - type: Documentation
+    url: https://pdfendpoint.com/docs
+  - type: PostmanCollection
+    url: collections/pdfendpoint.postman_collection.json
+  - type: OpenCollection
+    url: collections/pdfendpoint.opencollection.json
+  - type: Documentation
+    url: https://pdfendpoint.com/docs/document/url
+  - type: Documentation
+    url: https://pdfendpoint.com/docs/delivery-mode
+- aid: pdfendpoint:pdfendpoint-renders-api
+  name: PDFEndpoint Renders API
+  description: The Renders API from PDFEndpoint — 2 operation(s) for renders.
+  humanURL: https://pdfendpoint.com/docs
+  baseURL: https://api.pdfendpoint.com/v1
+  tags:
+  - Renders
+  properties:
+  - type: OpenAPI
+    url: openapi/pdfendpoint-renders-api-openapi.yml
+  - type: Documentation
+    url: https://pdfendpoint.com/docs
+  - type: PostmanCollection
+    url: collections/pdfendpoint.postman_collection.json
+  - type: OpenCollection
+    url: collections/pdfendpoint.opencollection.json
+  - type: Documentation
+    url: https://pdfendpoint.com/docs/document/url
+  - type: Documentation
+    url: https://pdfendpoint.com/docs/delivery-mode
 common:
 - type: AgenticAccess
   url: agentic-access/pdfendpoint-agentic-access.yml
