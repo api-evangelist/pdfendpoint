@@ -1,0 +1,18 @@
+{
+  "provider": "pdfendpoint",
+  "sources": [
+    "pdfendpoint-account-api-openapi.yml",
+    "pdfendpoint-convert-api-openapi.yml",
+    "pdfendpoint-renders-api-openapi.yml"
+  ],
+  "outputs": [
+    "pdfendpoint-account-api-openapi.yml",
+    "pdfendpoint-convert-api-openapi.yml",
+    "pdfendpoint-renders-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

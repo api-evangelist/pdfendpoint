@@ -1,0 +1,471 @@
+openapi: 3.0.1
+info:
+  title: PDFEndpoint API
+  description: >-
+    Lightweight HTML and URL to PDF conversion API. A single POST /convert
+    endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF
+    using a headless browser, with options for page size, margins, orientation,
+    headers and footers, encryption, and multiple delivery modes. Additional
+    endpoints list, remove, and report usage for generated renders.
+  termsOfService: https://pdfendpoint.com
+  contact:
+    name: PDFEndpoint Support
+    url: https://pdfendpoint.com
+  version: '1.0'
+servers:
+  - url: https://api.pdfendpoint.com/v1
+security:
+  - bearerAuth: []
+paths:
+  /convert:
+    post:
+      operationId: convert
+      tags:
+        - Convert
+      summary: Convert HTML or a URL to PDF.
+      description: >-
+        Renders raw HTML (html) or a publicly accessible HTTPS URL (url) into a
+        PDF. Exactly one of html or url is required. Returns a JSON envelope by
+        default; the delivery_mode parameter selects alternate delivery (base64,
+        inline, webhook, s3, gcp, jsonp). Only successful, non-sandbox
+        conversions are billed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertRequest'
+      responses:
+        '200':
+          description: Conversion succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConvertResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Missing or invalid API key.
+        '429':
+          description: Rate limit or monthly conversion limit exceeded.
+  /list:
+    get:
+      operationId: listRenders
+      tags:
+        - Renders
+      summary: List created PDFs.
+      description: >-
+        Lists previously created PDFs from latest to oldest, with optional
+        filters.
+      responses:
+        '200':
+          description: A list of created renders.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponse'
+        '401':
+          description: Missing or invalid API key.
+  /remove/{task_id}:
+    delete:
+      operationId: removeRender
+      tags:
+        - Renders
+      summary: Delete a specific PDF.
+      description: Deletes a previously created PDF identified by its task identifier.
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Identifier of the render to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Render deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleResponse'
+        '401':
+          description: Missing or invalid API key.
+        '404':
+          description: Render not found.
+  /usage:
+    get:
+      operationId: getUsage
+      tags:
+        - Account
+      summary: Get current billing-cycle usage.
+      description: Returns API usage for the current billing cycle.
+      responses:
+        '200':
+          description: Current usage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageResponse'
+        '401':
+          description: Missing or invalid API key.
+  /health:
+    get:
+      operationId: getHealth
+      tags:
+        - Account
+      summary: System status check.
+      description: Returns the current system status.
+      responses:
+        '200':
+          description: System status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        API key passed as a Bearer token in the Authorization header. Manage
+        keys at https://pdfendpoint.com/app/tokens.
+  schemas:
+    ConvertRequest:
+      type: object
+      description: >-
+        Conversion request. Provide exactly one of html or url. All other
+        properties are optional and control rendering, layout, delivery, and
+        security.
+      properties:
+        html:
+          type: string
+          description: Raw HTML content to convert. Mutually exclusive with url.
+        url:
+          type: string
+          format: uri
+          description: Publicly accessible HTTPS URL to convert. Mutually exclusive with html.
+        sandbox:
+          type: boolean
+          default: false
+          description: When true, output is watermarked and the conversion is not billed.
+        page_size:
+          type: string
+          default: A4
+          description: Page size such as A4, Letter, Legal, or A0-A9 / B0-B9.
+        orientation:
+          type: string
+          enum: [vertical, horizontal]
+          default: vertical
+          description: Page orientation.
+        viewport:
+          type: string
+          default: 1440x900
+          description: Browser viewport in WIDTHxHEIGHT format.
+        zoom:
+          type: number
+          minimum: 0.1
+          maximum: 2
+          default: 1
+          description: Page zoom factor.
+        margin_top:
+          type: string
+          default: 0px
+        margin_bottom:
+          type: string
+          default: 0px
+        margin_left:
+          type: string
+          default: 0px
+        margin_right:
+          type: string
+          default: 0px
+        print_pages:
+          type: string
+          description: Page ranges to print, e.g. "2-5" or "2,3,5".
+        css:
+          type: string
+          description: CSS injected into the page via a style tag.
+        js:
+          type: string
+          description: JavaScript injected into the page.
+        parse_liquid:
+          type: boolean
+          default: false
+          description: When true, the HTML is parsed as a Liquid template.
+        liquid_data:
+          type: object
+          additionalProperties: true
+          description: JSON variables used when parse_liquid is true.
+        no_images:
+          type: boolean
+          default: false
+        no_links:
+          type: boolean
+          default: false
+        no_backgrounds:
+          type: boolean
+          default: false
+        no_javascript:
+          type: boolean
+          default: false
+        no_blank_pages:
+          type: boolean
+          default: false
+        no_css:
+          type: boolean
+          default: false
+        no_ads:
+          type: boolean
+          default: false
+        no_forms:
+          type: boolean
+          default: false
+        scroll_whole_page:
+          type: boolean
+          default: false
+          description: Scrolls the page to trigger lazy-loaded content before rendering.
+        use_print_media:
+          type: boolean
+          default: false
+          description: Emulates @media print CSS styles.
+        image_compression_quality:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Image compression quality.
+        image_compression_width:
+          type: integer
+          description: Target image width in pixels; aspect ratio is preserved.
+        header_html:
+          type: string
+          description: HTML for the page header. Mutually exclusive with header_text.
+        header_text:
+          type: string
+          description: Plain text page header. Mutually exclusive with header_html.
+        header_align:
+          type: string
+          enum: [left, center, right]
+        header_margin:
+          type: string
+          default: 0px
+        header_start_at:
+          type: string
+          default: '1'
+        footer_html:
+          type: string
+          description: HTML for the page footer. Mutually exclusive with footer_text.
+        footer_text:
+          type: string
+          description: Plain text page footer. Mutually exclusive with footer_html.
+        footer_align:
+          type: string
+          enum: [left, center, right]
+        footer_margin:
+          type: string
+          default: 0px
+        footer_start_at:
+          type: string
+          default: '1'
+        delivery_mode:
+          type: string
+          enum: [json, base64, inline, webhook, s3, gcp, jsonp]
+          default: json
+          description: How the generated PDF is returned or delivered.
+        webhook_endpoint:
+          type: string
+          format: uri
+          description: HTTPS URL notified when delivery_mode is webhook.
+        callback:
+          type: string
+          description: Callback function name used when delivery_mode is jsonp.
+        s3_bucket_name:
+          type: string
+        s3_bucket_key:
+          type: string
+        s3_bucket_secret:
+          type: string
+        gcp_project_id:
+          type: string
+        gcp_user_email:
+          type: string
+        gcp_private_key:
+          type: string
+        gcp_bucket_name:
+          type: string
+        wait_for_selector:
+          type: string
+          description: CSS selector to wait for before rendering (30s timeout).
+        wait_for_function:
+          type: string
+          description: JavaScript function name to wait for before rendering (30s timeout).
+        wait_for_timeout:
+          type: integer
+          description: Time to wait in milliseconds before rendering.
+        wait_for_network:
+          type: boolean
+          default: false
+          description: Waits for network activity to settle before rendering.
+        auth_user:
+          type: string
+          description: Username for HTTP basic auth on the target URL.
+        auth_password:
+          type: string
+          description: Password for HTTP basic auth on the target URL.
+        http_cookies:
+          type: object
+          additionalProperties: true
+          description: Cookies sent when loading the target URL.
+        http_headers:
+          type: object
+          additionalProperties: true
+          description: HTTP headers sent when loading the target URL.
+        location_lat:
+          type: number
+          description: Geolocation latitude.
+        location_lng:
+          type: number
+          description: Geolocation longitude.
+        location_accuracy:
+          type: integer
+          minimum: 0
+          maximum: 100
+          default: 100
+        user_agent:
+          type: string
+        accept_language:
+          type: string
+          default: en-US
+        accept_encoding:
+          type: string
+          default: utf-8
+        filename:
+          type: string
+          maxLength: 180
+          description: Output filename.
+        enable_html_validation:
+          type: boolean
+          default: true
+        secret_key:
+          type: string
+          description: MD5 hash used to restrict URL access.
+        encrypt:
+          type: boolean
+          default: false
+        owner_password:
+          type: string
+        user_password:
+          type: string
+        encryption_print_rights:
+          type: string
+          enum: [full, low, none]
+          default: full
+        encryption_modify_rights:
+          type: string
+          enum: [all, annotate, form, assembly, none]
+          default: all
+        encryption_copy_rights:
+          type: string
+          enum: [full, none]
+          default: full
+        title:
+          type: string
+        author:
+          type: string
+        creator:
+          type: string
+        producer:
+          type: string
+        subject:
+          type: string
+        keywords:
+          type: string
+    ConvertResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier for the request.
+        success:
+          type: boolean
+        billed:
+          type: boolean
+          description: Whether the conversion counted toward the monthly limit.
+        billed_units:
+          type: integer
+          description: Number of units billed for the conversion.
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+              description: URL of the generated PDF (json delivery mode).
+            filename:
+              type: string
+            file_size:
+              type: integer
+              description: Size of the generated PDF in bytes.
+            expires_after:
+              type: string
+              format: date-time
+              description: Timestamp after which the stored PDF expires.
+    ListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              request_id:
+                type: string
+              filename:
+                type: string
+              file_size:
+                type: integer
+              url:
+                type: string
+                format: uri
+              created_at:
+                type: string
+                format: date-time
+    UsageResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            monthly_limit:
+              type: integer
+            monthly_used:
+              type: integer
+            cycle_ends:
+              type: string
+              format: date-time
+    SimpleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
