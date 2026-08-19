@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "PDFEndpoint Account Convert API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Convert",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Convert HTML or a URL to PDF.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.pdfendpoint.com/v1/convert",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Renders raw HTML (html) or a publicly accessible HTTPS URL (url) into a PDF. Exactly one of html or url is required. Returns a JSON envelope by default; the delivery_mode parameter selects alternate delivery (base64, inline, webhook, s3, gcp, jsonp). Only successful, non-sandbox conversions are billed."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "PDFEndpoint Account API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get current billing-cycle usage.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.pdfendpoint.com/v1/usage"
+          },
+          "docs": "Returns API usage for the current billing cycle."
+        },
+        {
+          "info": {
+            "name": "System status check.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.pdfendpoint.com/v1/health"
+          },
+          "docs": "Returns the current system status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

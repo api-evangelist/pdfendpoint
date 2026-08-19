@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "PDFEndpoint Account Renders API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Renders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List created PDFs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.pdfendpoint.com/v1/list"
+          },
+          "docs": "Lists previously created PDFs from latest to oldest, with optional filters."
+        },
+        {
+          "info": {
+            "name": "Delete a specific PDF.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.pdfendpoint.com/v1/remove/:task_id",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the render to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a previously created PDF identified by its task identifier."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
