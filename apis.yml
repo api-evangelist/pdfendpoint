@@ -8,6 +8,18 @@ description: PDFEndpoint is a lightweight HTML and URL to PDF conversion API. A 
   headers and footers, encryption, and multiple delivery modes (JSON URL, base64,
   inline, webhook, S3, GCP). A sandbox mode watermarks output without consuming the
   monthly quota.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
