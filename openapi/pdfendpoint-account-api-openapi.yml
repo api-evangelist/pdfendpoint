@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: PDFEndpoint Account API
   description: Lightweight HTML and URL to PDF conversion API. A single POST /convert endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF using a headless browser, with options for page size, margins, orientation, headers and footers, encryption, and multiple delivery modes. Additional endpoints list, remove, and report usage for generated renders.
@@ -19,7 +19,7 @@ paths:
       operationId: getUsage
       tags:
       - Account
-      summary: Get current billing-cycle usage.
+      summary: Get current billing-cycle usage
       description: Returns API usage for the current billing cycle.
       responses:
         '200':
@@ -35,7 +35,7 @@ paths:
       operationId: getHealth
       tags:
       - Account
-      summary: System status check.
+      summary: System status check
       description: Returns the current system status.
       responses:
         '200':

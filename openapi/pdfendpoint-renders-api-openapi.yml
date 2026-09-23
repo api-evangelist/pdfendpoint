@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: PDFEndpoint Account Renders API
+  title: PDFEndpoint Renders API
   description: Lightweight HTML and URL to PDF conversion API. A single POST /convert endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF using a headless browser, with options for page size, margins, orientation, headers and footers, encryption, and multiple delivery modes. Additional endpoints list, remove, and report usage for generated renders.
   termsOfService: https://pdfendpoint.com
   contact:
@@ -19,7 +19,7 @@ paths:
       operationId: listRenders
       tags:
       - Renders
-      summary: List created PDFs.
+      summary: List created PDFs
       description: Lists previously created PDFs from latest to oldest, with optional filters.
       responses:
         '200':
@@ -35,7 +35,7 @@ paths:
       operationId: removeRender
       tags:
       - Renders
-      summary: Delete a specific PDF.
+      summary: Delete a specific PDF
       description: Deletes a previously created PDF identified by its task identifier.
       parameters:
       - name: task_id

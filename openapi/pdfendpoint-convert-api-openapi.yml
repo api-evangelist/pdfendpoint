@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: PDFEndpoint Account Convert API
+  title: PDFEndpoint Convert API
   description: Lightweight HTML and URL to PDF conversion API. A single POST /convert endpoint renders raw HTML or a publicly accessible HTTPS URL into a PDF using a headless browser, with options for page size, margins, orientation, headers and footers, encryption, and multiple delivery modes. Additional endpoints list, remove, and report usage for generated renders.
   termsOfService: https://pdfendpoint.com
   contact:
@@ -19,7 +19,7 @@ paths:
       operationId: convert
       tags:
       - Convert
-      summary: Convert HTML or a URL to PDF.
+      summary: Convert HTML or a URL to PDF
       description: Renders raw HTML (html) or a publicly accessible HTTPS URL (url) into a PDF. Exactly one of html or url is required. Returns a JSON envelope by default; the delivery_mode parameter selects alternate delivery (base64, inline, webhook, s3, gcp, jsonp). Only successful, non-sandbox conversions are billed.
       requestBody:
         required: true
@@ -58,6 +58,36 @@ components:
           type: array
           items:
             type: string
+    ConvertResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier for the request.
+        success:
+          type: boolean
+        billed:
+          type: boolean
+          description: Whether the conversion counted toward the monthly limit.
+        billed_units:
+          type: integer
+          description: Number of units billed for the conversion.
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+              description: URL of the generated PDF (json delivery mode).
+            filename:
+              type: string
+            file_size:
+              type: integer
+              description: Size of the generated PDF in bytes.
+            expires_after:
+              type: string
+              format: date-time
+              description: Timestamp after which the stored PDF expires.
     ConvertRequest:
       type: object
       description: Conversion request. Provide exactly one of html or url. All other properties are optional and control rendering, layout, delivery, and security.
@@ -329,36 +359,6 @@ components:
           type: string
         keywords:
           type: string
-    ConvertResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique identifier for the request.
-        success:
-          type: boolean
-        billed:
-          type: boolean
-          description: Whether the conversion counted toward the monthly limit.
-        billed_units:
-          type: integer
-          description: Number of units billed for the conversion.
-        data:
-          type: object
-          properties:
-            url:
-              type: string
-              format: uri
-              description: URL of the generated PDF (json delivery mode).
-            filename:
-              type: string
-            file_size:
-              type: integer
-              description: Size of the generated PDF in bytes.
-            expires_after:
-              type: string
-              format: date-time
-              description: Timestamp after which the stored PDF expires.
   securitySchemes:
     bearerAuth:
       type: http
