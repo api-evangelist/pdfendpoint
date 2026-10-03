@@ -57,6 +57,13 @@ paths:
           description: Render not found.
 components:
   schemas:
+    SimpleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
     ListResponse:
       type: object
       properties:
@@ -79,13 +86,6 @@ components:
               created_at:
                 type: string
                 format: date-time
-    SimpleResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
   securitySchemes:
     bearerAuth:
       type: http

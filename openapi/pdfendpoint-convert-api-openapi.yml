@@ -46,18 +46,6 @@ paths:
           description: Rate limit or monthly conversion limit exceeded.
 components:
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
-        errors:
-          type: array
-          items:
-            type: string
     ConvertResponse:
       type: object
       properties:
@@ -359,6 +347,18 @@ components:
           type: string
         keywords:
           type: string
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
   securitySchemes:
     bearerAuth:
       type: http
