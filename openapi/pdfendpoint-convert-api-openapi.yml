@@ -46,6 +46,18 @@ paths:
           description: Rate limit or monthly conversion limit exceeded.
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
     ConvertRequest:
       type: object
       description: Conversion request. Provide exactly one of html or url. All other properties are optional and control rendering, layout, delivery, and security.
@@ -317,18 +329,6 @@ components:
           type: string
         keywords:
           type: string
-    ErrorResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
-        errors:
-          type: array
-          items:
-            type: string
     ConvertResponse:
       type: object
       properties:
